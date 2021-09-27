@@ -4,8 +4,11 @@ import PersonIcon from '@mui/icons-material/Person';
 
 import { States } from '../../Constant';
 
+import { useThemeContext } from "../../ThemeContext";
+
 const Kanban = ({ data, setData }) => {
-    const [ticket, setTicket] = useState(data)
+    const [ticket, setTicket] = useThemeContext();
+
     const handleChangeState = (event, id, currentState) => {
         try {
             let copyData = { ...ticket };
@@ -21,9 +24,6 @@ const Kanban = ({ data, setData }) => {
         }
     }
 
-    useEffect(() => {
-        setData(ticket);        
-    }, [ticket])
     return (
         <ul className="container">
             {Object.keys(States)

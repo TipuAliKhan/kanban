@@ -12,6 +12,8 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import BasicModal from '../Modal/Modal';
 
+import { useThemeContext, useThemePreservedContext } from "../../ThemeContext";
+
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -55,9 +57,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 
-const Header = ({ data, setTicket }) => {
+const Header = ({ reset }) => {
+    const [data, setTicket] = useThemeContext();
+    const [preservedData, setPreservedData] = useThemePreservedContext();
+    
     const [user, setUser] = useState([]);
     const [open, setOpen] = useState(false);
+
     useEffect(() => {
         let users = [];
         for (const key in data) {
@@ -68,11 +74,13 @@ const Header = ({ data, setTicket }) => {
 
     const handleChange = (event) => {
         if (event.target.value.length > 2) {
-            let copyData = data;
+            let copyData = {...preservedData};
             for (const key in copyData) {
                 copyData[key] = copyData[key].filter(item => item.title.toLowerCase().includes(event.target.value.toLowerCase()));
             }
             setTicket(copyData);
+        }else{
+            setTicket({...preservedData})
         }
     }
     return (
@@ -90,15 +98,15 @@ const Header = ({ data, setTicket }) => {
                                 onChange={handleChange}
                             />
                         </Search>
-                        <MultiSelect title="epic" data={Constants.epic} ticket={data} setTicket={setTicket} />
-                        <MultiSelect title="user" data={user} ticket={data} setTicket={setTicket} />
-                        <MultiSelect title="type" data={Constants.type} ticket={data} setTicket={setTicket} />
-                        <Button variant="contained">Clear Filter</Button>
+                        <MultiSelect title="epic" data={Constants.epic} />
+                        <MultiSelect title="user" data={user} />
+                        <MultiSelect title="type" data={Constants.type} />
+                        <Button variant="contained" onClick={() => {setTicket({...preservedData})}}>Clear Filter</Button>
                         <Button variant="contained" onClick={() => setOpen(true)}>Create Item</Button>
                     </Toolbar>
                 </AppBar>
             </Box>
-            <BasicModal open={open} setOpen={setOpen} data={data} setTicket={setTicket}/>
+            <BasicModal open={open} setOpen={setOpen} />
         </>
     )
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -6,6 +6,8 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
+
+import { useThemeContext, useThemePreservedContext } from "../../ThemeContext";
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
@@ -18,26 +20,24 @@ const MenuProps = {
     },
 };
 
-const MultiSelect = ({ title, data, ticket, setTicket }) => {
-    const [personName, setPersonName] = React.useState([]);
-    const [preserveData, setpreserveData] = useState([]);
+const MultiSelect = ({ title, data }) => {
+    const [ticket, setTicket] = useThemeContext();
+    const [preservedData, setPreservedData] = useThemePreservedContext();
 
-    useEffect(() => {
-        setpreserveData(ticket);
-    }, []);
+    const [personName, setPersonName] = useState([]);
+
     const handleChange = (event) => {
         let { target: { value } } = event;
         if (value.length) {
 
             setPersonName(typeof value === 'string' ? value.split(',') : value);
-            const copyData = ticket;
+            const copyData = {...preservedData};
             value = value.join(' ').toLowerCase().split(' ');
+
             for (const key in copyData) {
                 copyData[key] = copyData[key].filter(item => value.includes(item[title].toLowerCase()));
             }
-            setTicket(copyData);
-        } else {
-            setTicket(preserveData);
+            setTicket({...ticket, ...copyData});
         }
     };
 

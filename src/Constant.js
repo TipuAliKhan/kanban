@@ -27,29 +27,15 @@ export const Data = {
             epic: 'Header',
             type: 'task'
 
-        },{
-            id: Math.ceil(Math.random() * 100000),
-            title: 'Build header',
-            user: 'Luffy',
-            epic: 'Header',
-            type: 'task'
-
-        },
+        }],
+    1: [
         {
             id: Math.ceil(Math.random() * 100000),
             title: 'Build Search component',
             user: 'Zoro',
             epic: 'Header',
             type: 'bug'
-        },
-        {
-            id: Math.ceil(Math.random() * 100000),
-            title: 'Build footer',
-            user: 'Sanji',
-            epic: 'Footer',
-            type: 'story'
         }],
-    1: [],
     2: [
         {
             id: Math.ceil(Math.random() * 100000),
@@ -66,6 +52,20 @@ export const Data = {
             type: 'story'
         }
     ],
-    3: [],
-    4: [],
+    3: [{
+        id: Math.ceil(Math.random() * 100000),
+        title: 'Build header',
+        user: 'Luffy',
+        epic: 'Header',
+        type: 'task'
+
+    },],
+    4: [,
+        {
+            id: Math.ceil(Math.random() * 100000),
+            title: 'Build footer',
+            user: 'Sanji',
+            epic: 'Footer',
+            type: 'story'
+        }],
 }

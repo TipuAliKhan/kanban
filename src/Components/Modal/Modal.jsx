@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
+import { useThemeContext, useThemePreservedContext } from "../../ThemeContext";
 
 import { Constants } from '../../Constant';
 const style = {
@@ -18,7 +19,11 @@ const style = {
     p: 4,
 };
 
-const BasicModal = ({ open, setOpen, data, setTicket }) => {
+const BasicModal = ({ open, setOpen }) => {
+    
+    const [ticket, setTicket] = useThemeContext();
+    const [preservedData, setPreservedData] = useThemePreservedContext();
+
     const [entry, setentry] = useState({
         title: '',
         user: '',
@@ -26,7 +31,6 @@ const BasicModal = ({ open, setOpen, data, setTicket }) => {
         type: ''
     });
     const [message, setmessage] = useState('');
-    const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const createEntry = () => {
@@ -38,19 +42,23 @@ const BasicModal = ({ open, setOpen, data, setTicket }) => {
             }
         }
         if (flag) {
-            const copyData = data;
+            const copyticket = {...ticket};
+            const copyData = {...preservedData};
             const newEntry = entry;
 
             newEntry.id = Math.ceil(Math.random() * 100000);
+            copyticket[0].push(newEntry);
             copyData[0].push(newEntry);
 
-            setTicket(copyData);
+            setTicket(copyticket);
+            setPreservedData(copyData);
             setentry({
                 title: '',
                 user: '',
                 epic: '',
                 type: ''
-            })
+            });
+            handleClose();
         } else {
             setmessage('Please pass all values');
         }
@@ -74,7 +82,6 @@ const BasicModal = ({ open, setOpen, data, setTicket }) => {
     }
     return (
         <>
-            <Button onClick={handleOpen}>Open modal</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -87,23 +94,23 @@ const BasicModal = ({ open, setOpen, data, setTicket }) => {
                     </Typography>
                     <div id="modal-modal-description" sx={{ mt: 2 }}>
                         <div>
-                            <label>Title    </label>
-                            <input type="text" value={entry.title} onChange={handleTitleChange} />
+                            <label for="title">Title </label>
+                            <input id="title" type="text" value={entry.title} onChange={handleTitleChange} />
                         </div>
                         <div>
-                            <label>User </label>
-                            <input type="text" value={entry.user} onChange={handleUserChange} />
+                            <label for="user">User </label>
+                            <input id="user" type="text" value={entry.user} onChange={handleUserChange} />
                         </div>
                         <div>
-                            <label>Epic </label>
-                            <select value={entry.epic} onChange={handleEpicChange}>
+                            <label for="epic">Epic </label>
+                            <select id="epic" value={entry.epic} onChange={handleEpicChange}>
                                 {Constants.epic.map(item => <option>{item}</option>)}
                             </select>
                         </div>
 
                         <div>
-                            <label>Type </label>
-                            <select value={entry.type} onChange={handleTypeChange}>
+                            <label for="type">Type </label>
+                            <select id="type" value={entry.type} onChange={handleTypeChange}>
                                 {Constants.type.map(item => <option>{item}</option>)}
                             </select>
                         </div>
